@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Checkbox, RadioButton } from "react-native-paper";
+import { useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useAppConfig } from "@/hooks/useConfig";
 import { Collapsible } from "@/components/Collapsible";
@@ -9,8 +10,11 @@ import IconEmail from "@/components/Icons/IconEmail";
 import IconPhone from "@/components/Icons/IconPhone";
 
 export default function ConfigScreen() {
+  const params = useLocalSearchParams();
   const { t } = useTranslation();
   const { config, isLoading, updateConfig, changeLanguage } = useAppConfig();
+
+  console.log(params);
 
   if (isLoading) {
     return (
@@ -42,7 +46,10 @@ export default function ConfigScreen() {
         </Collapsible>
 
         {/* Sección de Preferencias */}
-        <Collapsible title={t("preferencesTitle")}>
+        <Collapsible
+          title={t("preferencesTitle")}
+          open={params.section === "language"}
+        >
           <Text style={styles.sectionSubtitle}>{t("selectLanguage")}</Text>
           <RadioButton.Group
             onValueChange={changeLanguage}

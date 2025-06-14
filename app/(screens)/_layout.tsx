@@ -1,4 +1,5 @@
 import { Slot, useRouter, usePathname, Href } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
   View,
   TouchableOpacity,
@@ -13,8 +14,6 @@ import IconHome from "@/components/Icons/IconHome";
 import IconNews from "@/components/Icons/IconNotice";
 import IconConfig from "@/components/Icons/IconConfig";
 import IconSearch from "@/components/Icons/IconSearch";
-import { useAppConfig } from "@/hooks/useConfig";
-import { useTranslation } from "react-i18next";
 
 interface Tab {
   route: Href;
@@ -50,10 +49,7 @@ export default function CustomLayout() {
   const pathname = usePathname();
   const { t } = useTranslation();
 
-  const getIsActive = (partialRoute: string) => {
-    console.log(pathname, partialRoute, pathname === partialRoute);
-    return pathname.includes(partialRoute);
-  };
+  const getIsActive = (partialRoute: string) => pathname.includes(partialRoute);
   const getIconColor = (isActive: boolean) => (isActive ? "#888" : "#000");
 
   return (
@@ -62,11 +58,11 @@ export default function CustomLayout() {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           alignItems: "center",
           height: 80,
           paddingVertical: 10,
-          paddingHorizontal: 30,
+          paddingHorizontal: 20,
           marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
           borderBottomWidth: 1,
           borderBottomColor: "#ccc",
@@ -75,7 +71,12 @@ export default function CustomLayout() {
         {pathname !== "/config" ? (
           <TouchableOpacity
             style={styles.circleButton}
-            onPress={() => router.push("/(screens)/config")}
+            onPress={() =>
+              router.push({
+                pathname: "/(screens)/config",
+                params: { section: "language" },
+              })
+            }
           >
             <Text style={styles.buttonText}>
               {t("lenguage").toLocaleUpperCase()} {">"}
@@ -88,13 +89,18 @@ export default function CustomLayout() {
         )}
         <Image
           source={require("@/assets/images/adaptive-icon.png")}
-          style={{ height: 80, width: 100 }}
+          style={{ height: 100, width: 130 }}
           resizeMode="contain"
         />
         {pathname !== "/home/Search" ? (
           <TouchableOpacity
             style={styles.circleButton}
-            onPress={() => router.push("/(screens)/home/Search")}
+            onPress={() =>
+              router.push({
+                pathname: "/(screens)/home/Search",
+                params: { section: "language" },
+              })
+            }
           >
             <IconSearch fill="black" size={25} strokeWidth={1.6} />
           </TouchableOpacity>

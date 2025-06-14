@@ -6,8 +6,9 @@ import { useTheme } from "react-native-paper";
 export function Collapsible({
   children,
   title,
-}: PropsWithChildren & { title: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+  open,
+}: PropsWithChildren & { title: string; open?: boolean }) {
+  const [isOpen, setIsOpen] = useState(open || false);
   const theme = useTheme();
 
   return (
