@@ -11,7 +11,6 @@ import i18n from '../i18n';
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import "../global.css";
 import useAuth from "@/hooks/useAuth";
 
 axios.defaults.baseURL = "https://www.destinobrunca.com/";

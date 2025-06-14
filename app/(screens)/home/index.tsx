@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import useNews from "@/hooks/useNews";
 import RenderHTML from "react-native-render-html";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const locations = [
@@ -57,11 +57,15 @@ export default function Home() {
   const [containerWidth, setContainerWidth] = useState(0);
   const { t } = useTranslation();
 
+  useEffect(() => {
+    if (news.data.length === 0) news.getNews();
+  }, []);
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#4442" }}>
       {/* DESTAINTIONS */}
       <View style={styles.destinations}>
-        <Text style={styles.title}>{t('destination').toLocaleUpperCase()}</Text>
+        <Text style={styles.title}>{t("destination").toLocaleUpperCase()}</Text>
         <FlatList
           data={locations}
           scrollEnabled={false}
@@ -94,7 +98,9 @@ export default function Home() {
 
       {/* NEWS */}
       <View>
-        <Text style={[styles.title, { paddingHorizontal: 20 }]}>{t('news').toLocaleUpperCase()}</Text>
+        <Text style={[styles.title, { paddingHorizontal: 20 }]}>
+          {t("news").toLocaleUpperCase()}
+        </Text>
         {news.data.length > 0 ? (
           <FlatList
             style={{ gap: 10 }}
