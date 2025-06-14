@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "Destino Brunca",
+    "slug": "destino-brunca",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.destino.bruno",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.destino.bruno",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "@config-plugins/react-native-pdf",
+      "@config-plugins/react-native-blob-util"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "expo": {
+      "extra": {
+        "eas": {
+          "projectId": "6a9c200e-7f96-480f-9649-3ac93893c603"
+        }
+      },
+      "owner": "maxi.326519"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "226f45cd-acc2-4021-9b13-8f15a3e4642a"
+      }
+    },
+    "owner": "maxi.326519"
+  }
+}
