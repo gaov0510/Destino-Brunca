@@ -14,6 +14,7 @@ import IconNews from "@/components/Icons/IconNotice";
 import IconConfig from "@/components/Icons/IconConfig";
 import IconSearch from "@/components/Icons/IconSearch";
 import { useAppConfig } from "@/hooks/useConfig";
+import { useTranslation } from "react-i18next";
 
 interface Tab {
   route: Href;
@@ -47,7 +48,7 @@ const tabs: Tab[] = [
 export default function CustomLayout() {
   const router = useRouter();
   const pathname = usePathname();
-  const config = useAppConfig();
+  const { t } = useTranslation();
 
   const getIsActive = (partialRoute: string) => {
     console.log(pathname, partialRoute, pathname === partialRoute);
@@ -77,7 +78,7 @@ export default function CustomLayout() {
             onPress={() => router.push("/(screens)/config")}
           >
             <Text style={styles.buttonText}>
-              {config.config.language.toLocaleUpperCase()} {">"}
+              {t("lenguage").toLocaleUpperCase()} {">"}
             </Text>
           </TouchableOpacity>
         ) : (
