@@ -13,6 +13,7 @@ import IconHome from "@/components/Icons/IconHome";
 import IconNews from "@/components/Icons/IconNotice";
 import IconConfig from "@/components/Icons/IconConfig";
 import IconSearch from "@/components/Icons/IconSearch";
+import { useAppConfig } from "@/hooks/useConfig";
 
 interface Tab {
   route: Href;
@@ -46,6 +47,7 @@ const tabs: Tab[] = [
 export default function CustomLayout() {
   const router = useRouter();
   const pathname = usePathname();
+  const config = useAppConfig();
 
   const getIsActive = (partialRoute: string) => {
     console.log(pathname, partialRoute, pathname === partialRoute);
@@ -74,7 +76,9 @@ export default function CustomLayout() {
             style={styles.circleButton}
             onPress={() => router.push("/(screens)/config")}
           >
-            <Text style={styles.buttonText}>ES {">"}</Text>
+            <Text style={styles.buttonText}>
+              {config.config.language.toLocaleUpperCase()} {">"}
+            </Text>
           </TouchableOpacity>
         ) : (
           <View

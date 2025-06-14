@@ -11,6 +11,7 @@ import {
 import useNews from "@/hooks/useNews";
 import RenderHTML from "react-native-render-html";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const locations = [
   {
@@ -54,12 +55,13 @@ export default function Home() {
   const theme = useTheme();
   const news = useNews();
   const [containerWidth, setContainerWidth] = useState(0);
+  const { t } = useTranslation();
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#4442" }}>
       {/* DESTAINTIONS */}
       <View style={styles.destinations}>
-        <Text style={styles.title}>DESTINOS</Text>
+        <Text style={styles.title}>{t('destination').toLocaleUpperCase()}</Text>
         <FlatList
           data={locations}
           scrollEnabled={false}
@@ -92,7 +94,7 @@ export default function Home() {
 
       {/* NEWS */}
       <View>
-        <Text style={[styles.title, { paddingHorizontal: 20 }]}>NOTICIAS</Text>
+        <Text style={[styles.title, { paddingHorizontal: 20 }]}>{t('news').toLocaleUpperCase()}</Text>
         {news.data.length > 0 ? (
           <FlatList
             style={{ gap: 10 }}
@@ -161,7 +163,7 @@ export default function Home() {
               textAlignVertical: "center",
             }}
           >
-            NO HAY NOTICIAS
+            {t("newsEmpty")}
           </Text>
         )}
       </View>
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 20,
-    color: "#222"
+    color: "#222",
   },
   destinations: {
     padding: 20,

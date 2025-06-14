@@ -1,171 +1,189 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Checkbox, RadioButton } from "react-native-paper";
-import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useAppConfig } from "@/hooks/useConfig";
 import { Collapsible } from "@/components/Collapsible";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import IconMap from "@/components/Icons/IconMap";
 import IconEmail from "@/components/Icons/IconEmail";
 import IconPhone from "@/components/Icons/IconPhone";
 
-const STORAGE_KEY = "userPreferences";
+export default function ConfigScreen() {
+  const { t } = useTranslation();
+  const { config, isLoading, updateConfig, changeLanguage } = useAppConfig();
 
-export default function Config() {
-  const [group1, setGroup1] = useState("mes-dia");
-  const [group2, setGroup2] = useState("millas");
-  const [group3, setGroup3] = useState("12Horas");
-
-  const [checked1, setChecked1] = useState(false);
-  const [checked2, setChecked2] = useState(true);
-  const [checked3, setChecked3] = useState(true);
-  const [checked4, setChecked4] = useState(true);
-
-  // Cargar preferencias al montar el componente
-  useEffect(() => {
-    const loadPreferences = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
-        if (jsonValue) {
-          const prefs = JSON.parse(jsonValue);
-          setGroup1(prefs.group1 || "mes-dia");
-          setGroup2(prefs.group2 || "millas");
-          setGroup3(prefs.group3 || "12Horas");
-
-          setChecked1(prefs.checked1 ?? false);
-          setChecked2(prefs.checked2 ?? true);
-          setChecked3(prefs.checked3 ?? true);
-          setChecked4(prefs.checked4 ?? true);
-        }
-      } catch (e) {
-        console.error("Error cargando preferencias:", e);
-      }
-    };
-    loadPreferences();
-  }, []);
-
-  // Guardar preferencias al cambiar cualquier valor
-  useEffect(() => {
-    const savePreferences = async () => {
-      try {
-        const prefs = {
-          group1,
-          group2,
-          group3,
-          checked1,
-          checked2,
-          checked3,
-          checked4,
-        };
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-      } catch (e) {
-        console.error("Error guardando preferencias:", e);
-      }
-    };
-    savePreferences();
-  }, [group1, group2, group3, checked1, checked2, checked3, checked4]);
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>{t("loading")}</Text>
+      </View>
+    );
+  }
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        paddingHorizontal: 30,
-        backgroundColor: "#4442",
-      }}
-    >
-      <View style={{ marginVertical: 60 }}>
-        <Collapsible title="Contactos">
-          <View style={{ gap: 15, paddingHorizontal: 16 }}>
+    <ScrollView style={styles.container}>
+      <View style={styles.content}>
+        {/* Sección de Contacto */}
+        <Collapsible title={t("contactTitle")}>
+          <View style={styles.sectionContent}>
             <View style={styles.contactItem}>
-              <IconMap width={20} height={20} />
-              <Text>Uned, región brunca, costa rica</Text>
+              <IconMap width={20} height={20} fill="#666" />
+              <Text style={styles.contactText}>{t("contactAddress")}</Text>
             </View>
             <View style={styles.contactItem}>
-              <IconEmail width={20} height={20} />
-              <Text>egomezr@uned.ac.cr</Text>
+              <IconEmail width={20} height={20} fill="#666" />
+              <Text style={styles.contactText}>egomezr@uned.ac.cr</Text>
             </View>
             <View style={styles.contactItem}>
-              <IconPhone width={20} height={20} />
-              <Text>+506 27733013</Text>
+              <IconPhone width={20} height={20} fill="#666" />
+              <Text style={styles.contactText}>+506 27733013</Text>
             </View>
           </View>
         </Collapsible>
 
-        <Collapsible title="Preferencias de usuario">
-          <View>
-            <View style={{ marginBottom: 16 }}>
-              <Text style={styles.preferenceHeader}>Formato de fecha</Text>
-              <RadioButton.Group onValueChange={setGroup1} value={group1}>
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="Mes/Día (e.g. 05/28)"
-                  value="mes-dia"
-                />
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="Día/Mes (e.g. 30/12)"
-                  value="dia-mes"
-                />
-              </RadioButton.Group>
+        {/* Sección de Preferencias */}
+        <Collapsible title={t("preferencesTitle")}>
+          <Text style={styles.sectionSubtitle}>{t("selectLanguage")}</Text>
+          <RadioButton.Group
+            onValueChange={changeLanguage}
+            value={config.language}
+          >
+            <View style={styles.radioItem}>
+              <RadioButton value="es" />
+              <Text style={styles.radioLabel}>{t("spanish")}</Text>
             </View>
-            <View style={{ marginBottom: 16 }}>
-              <Text style={styles.preferenceHeader}>Formato de distancia</Text>
-              <RadioButton.Group onValueChange={setGroup2} value={group2}>
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="Millas (e.g. 50mi)"
-                  value="millas"
-                />
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="Kilometros (e.g. 80km)"
-                  value="kilometros"
-                />
-              </RadioButton.Group>
+            <View style={styles.radioItem}>
+              <RadioButton value="en" />
+              <Text style={styles.radioLabel}>{t("english")}</Text>
             </View>
-            <View>
-              <Text style={styles.preferenceHeader}>Formato de tiempo</Text>
-              <RadioButton.Group onValueChange={setGroup3} value={group3}>
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="12 Horas (e.g. 2:00 pm)"
-                  value="12Horas"
-                />
-                <RadioButton.Item
-                  style={{ height: 35 }}
-                  label="24 Horas (e.g. 16:00 pm)"
-                  value="24Horas"
-                />
-              </RadioButton.Group>
-            </View>
+          </RadioButton.Group>
+
+          <View style={styles.sectionContent}>
+            {/* Formato de Fecha */}
+            <Text style={styles.sectionSubtitle}>{t("dateFormat")}</Text>
+            <RadioButton.Group
+              onValueChange={(value) => updateConfig({ dateFormat: value })}
+              value={config.dateFormat}
+            >
+              <View style={styles.radioItem}>
+                <RadioButton value="mes-dia" />
+                <Text style={styles.radioLabel}>{t("monthDayFormat")}</Text>
+              </View>
+              <View style={styles.radioItem}>
+                <RadioButton value="dia-mes" />
+                <Text style={styles.radioLabel}>{t("dayMonthFormat")}</Text>
+              </View>
+            </RadioButton.Group>
+
+            {/* Formato de Distancia */}
+            <Text style={styles.sectionSubtitle}>{t("distanceFormat")}</Text>
+            <RadioButton.Group
+              onValueChange={(value) => updateConfig({ distanceFormat: value })}
+              value={config.distanceFormat}
+            >
+              <View style={styles.radioItem}>
+                <RadioButton value="kilometros" />
+                <Text style={styles.radioLabel}>{t("kilometers")}</Text>
+              </View>
+              <View style={styles.radioItem}>
+                <RadioButton value="millas" />
+                <Text style={styles.radioLabel}>{t("miles")}</Text>
+              </View>
+            </RadioButton.Group>
+
+            {/* Formato de Hora */}
+            <Text style={styles.sectionSubtitle}>{t("timeFormat")}</Text>
+            <RadioButton.Group
+              onValueChange={(value) => updateConfig({ timeFormat: value })}
+              value={config.timeFormat}
+            >
+              <View style={styles.radioItem}>
+                <RadioButton value="24Horas" />
+                <Text style={styles.radioLabel}>{t("24hourFormat")}</Text>
+              </View>
+              <View style={styles.radioItem}>
+                <RadioButton value="12Horas" />
+                <Text style={styles.radioLabel}>{t("12hourFormat")}</Text>
+              </View>
+            </RadioButton.Group>
           </View>
         </Collapsible>
 
-        <Collapsible title="Notificaciones">
-          <View>
-            <Checkbox.Item
-              label="Actualizaciones de la App"
-              style={{ flexDirection: "row-reverse" }}
-              status={checked1 ? "checked" : "unchecked"}
-              onPress={() => setChecked1(!checked1)}
-            />
-            <Checkbox.Item
-              label="Actualización de Noticias"
-              style={{ flexDirection: "row-reverse" }}
-              status={checked2 ? "checked" : "unchecked"}
-              onPress={() => setChecked2(!checked2)}
-            />
-            <Checkbox.Item
-              label="Actualizciones del Contenido"
-              style={{ flexDirection: "row-reverse" }}
-              status={checked3 ? "checked" : "unchecked"}
-              onPress={() => setChecked3(!checked3)}
-            />
-            <Checkbox.Item
-              label="Recomendaciones"
-              style={{ flexDirection: "row-reverse" }}
-              status={checked4 ? "checked" : "unchecked"}
-              onPress={() => setChecked4(!checked4)}
-            />
+        {/* Sección de Notificaciones */}
+        <Collapsible title={t("notificationsTitle")}>
+          <View style={styles.sectionContent}>
+            <View style={styles.checkboxItem}>
+              <Checkbox.Item
+                label={t("appUpdates")}
+                labelStyle={styles.checkboxLabel}
+                status={
+                  config.notifications.appUpdates ? "checked" : "unchecked"
+                }
+                onPress={() =>
+                  updateConfig({
+                    notifications: {
+                      ...config.notifications,
+                      appUpdates: !config.notifications.appUpdates,
+                    },
+                  })
+                }
+                mode="android"
+              />
+            </View>
+            <View style={styles.checkboxItem}>
+              <Checkbox.Item
+                label={t("newsUpdates")}
+                labelStyle={styles.checkboxLabel}
+                status={
+                  config.notifications.newsUpdates ? "checked" : "unchecked"
+                }
+                onPress={() =>
+                  updateConfig({
+                    notifications: {
+                      ...config.notifications,
+                      newsUpdates: !config.notifications.newsUpdates,
+                    },
+                  })
+                }
+                mode="android"
+              />
+            </View>
+            <View style={styles.checkboxItem}>
+              <Checkbox.Item
+                label={t("contentUpdates")}
+                labelStyle={styles.checkboxLabel}
+                status={
+                  config.notifications.contentUpdates ? "checked" : "unchecked"
+                }
+                onPress={() =>
+                  updateConfig({
+                    notifications: {
+                      ...config.notifications,
+                      contentUpdates: !config.notifications.contentUpdates,
+                    },
+                  })
+                }
+                mode="android"
+              />
+            </View>
+            <View style={styles.checkboxItem}>
+              <Checkbox.Item
+                label={t("recommendations")}
+                labelStyle={styles.checkboxLabel}
+                status={
+                  config.notifications.recommendations ? "checked" : "unchecked"
+                }
+                onPress={() =>
+                  updateConfig({
+                    notifications: {
+                      ...config.notifications,
+                      recommendations: !config.notifications.recommendations,
+                    },
+                  })
+                }
+                mode="android"
+              />
+            </View>
           </View>
         </Collapsible>
       </View>
@@ -174,18 +192,56 @@ export default function Config() {
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
+  container: {
+    flex: 1,
+    backgroundColor: "#4442",
+  },
+  content: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sectionContent: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  sectionSubtitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 10,
+    color: "#333",
   },
   contactItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
   },
-  preferenceHeader: {
-    fontWeight: "600",
+  contactText: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: "#555",
+  },
+  radioItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  radioLabel: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: "#444",
+  },
+  checkboxItem: {
+    marginVertical: 2,
+  },
+  checkboxLabel: {
+    fontSize: 14,
+    color: "#444",
   },
 });

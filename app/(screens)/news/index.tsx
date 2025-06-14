@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@react-navigation/native";
 import { Link } from "expo-router";
-import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -20,6 +21,7 @@ export default function News() {
   const [containerWidth, setContainerWidth] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (news.data.length === 0) {
@@ -41,7 +43,7 @@ export default function News() {
     <View style={{ flex: 1 }}>
       {loading && <Loading />}
       <View style={{ flex: 1, backgroundColor: "#4442" }}>
-        <Text style={styles.title}>NOTICIAS</Text>
+        <Text style={styles.title}>{t("news").toLocaleUpperCase()}</Text>
 
         {news.data.length > 0 ? (
           <FlatList
@@ -117,7 +119,7 @@ export default function News() {
               alignItems: "center",
             }}
           >
-            <Text>NO HAY NOTICIAS</Text>
+            <Text>{t("newsEmpty")}</Text>
           </View>
         )}
       </View>
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 20,
     marginLeft: 30,
-    color: "#222"
+    color: "#222",
   },
   newsItem: {
     flexDirection: "row",

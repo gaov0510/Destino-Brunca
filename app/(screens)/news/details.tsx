@@ -25,8 +25,6 @@ export default function NewsDetails() {
   const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
-    console.log("Item", params.apiId);
-
     if (params.id) {
       const data = newsData.data.find((data) => data.id === params.id);
       if (data) setNews(data);
