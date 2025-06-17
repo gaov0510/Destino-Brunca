@@ -1,19 +1,12 @@
 import { Slot, useRouter, usePathname, Href } from "expo-router";
 import { useTranslation } from "react-i18next";
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  Platform,
-  StatusBar,
-  Text,
-} from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image, Text } from "react-native";
 
 import IconHome from "@/components/Icons/IconHome";
 import IconNews from "@/components/Icons/IconNotice";
 import IconConfig from "@/components/Icons/IconConfig";
 import IconSearch from "@/components/Icons/IconSearch";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Tab {
   route: Href;
@@ -53,7 +46,7 @@ export default function CustomLayout() {
   const getIconColor = (isActive: boolean) => (isActive ? "#888" : "#000");
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       {/* Header */}
       <View
         style={{
@@ -63,7 +56,6 @@ export default function CustomLayout() {
           height: 80,
           paddingVertical: 10,
           paddingHorizontal: 20,
-          marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
           borderBottomWidth: 1,
           borderBottomColor: "#ccc",
         }}
@@ -158,7 +150,7 @@ export default function CustomLayout() {
           );
         })}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

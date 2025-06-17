@@ -1,5 +1,5 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from "react-i18next";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
@@ -7,11 +7,12 @@ import { Stack } from "expo-router";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SplashScreen from "expo-splash-screen";
 import axios from "axios";
-import i18n from '../i18n';
+import i18n from "../i18n";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import useAuth from "@/hooks/useAuth";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 axios.defaults.baseURL = "https://www.destinobrunca.com/";
 axios.defaults.withCredentials = false;
@@ -68,11 +69,13 @@ function RootLayoutNav() {
   return (
     <I18nextProvider i18n={i18n}>
       <ThemeProvider value={DefaultTheme}>
-        <StatusBar style="dark" backgroundColor={"white"} />
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(screens)" options={{ headerShown: false }} />
-        </Stack>
+        <SafeAreaProvider>
+          <StatusBar style="dark" backgroundColor={"white"} />
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(screens)" options={{ headerShown: false }} />
+          </Stack>
+        </SafeAreaProvider>
       </ThemeProvider>
     </I18nextProvider>
   );

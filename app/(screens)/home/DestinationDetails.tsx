@@ -26,8 +26,6 @@ export default function DestinationDetails() {
   const [destination, setDestination] = useState<Destination>();
 
   useEffect(() => {
-    console.log(params.item);
-
     if (params.index) {
       const data = destinations.data.find((_, i) => i === Number(params.index));
       if (data) setDestination(data);

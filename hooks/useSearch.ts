@@ -42,8 +42,6 @@ const useSearch = (): UseSearchState => {
 
   async function getData(search: string) {
     try {
-      console.log(1);
-
       // Get data
       const response = await axios.get(
         `/api/content-search?search=${search}&page=1`,
@@ -54,17 +52,13 @@ const useSearch = (): UseSearchState => {
       if (!Array.isArray(response?.data?.data) || !response.data.pagination)
         throw new Error("Error to get the search");
 
-      console.log(2);
-
-      console.log(response?.data);
-
       // Udpate state
       content.setData(response.data.data, response.data.pagination);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log("Destination catch", error.response?.data);
       } else {
-        console.log("Default catch", error);
+        console.log(error);
       }
     }
   }

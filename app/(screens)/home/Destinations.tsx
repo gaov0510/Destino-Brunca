@@ -68,7 +68,6 @@ export default function Destination() {
   }>();
 
   useEffect(() => {
-    console.log(params.categoryId, location?.id, location);
     if (params.categoryId && location?.id) {
       setLoading(true);
       destinations

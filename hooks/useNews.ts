@@ -54,20 +54,13 @@ const useNews = (): UseNewsState => {
       if (!Array.isArray(response?.data?.data) || !response.data.pagination)
         throw new Error("Error to get the news");
 
-      console.log("Data", response.data?.data?.length);
-
       // Udpate state
       content.setNews(response.data.data, response.data.pagination);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log("News catch", error.response?.status, error.response?.data);
-        console.log(
-          "Auth News catch",
-          error.response?.data.message,
-          error.response?.data.message?.includes("permission is required")
-        );
       } else {
-        console.log("Default catch", error);
+        console.log(error);
       }
 
       if (error instanceof AxiosError) {
@@ -86,13 +79,8 @@ const useNews = (): UseNewsState => {
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log("News catch", error.response?.status, error.response?.data);
-        console.log(
-          "Auth News catch",
-          error.response?.data.message,
-          error.response?.data.message?.includes("permission is required")
-        );
       } else {
-        console.log("Default catch", error);
+        console.log(error);
       }
 
       if (error instanceof AxiosError) {

@@ -71,7 +71,13 @@ export default function Home() {
           scrollEnabled={false}
           keyExtractor={(_, index) => Date.now().toString() + index}
           renderItem={({ item }) => (
-            <Link href="/(screens)/home/Location" style={{ marginBottom: 20 }}>
+            <Link
+              href={{
+                pathname: "/(screens)/home/Location",
+                params: { name: item.name },
+              }}
+              style={{ marginBottom: 20 }}
+            >
               <View style={styles.destinationItem}>
                 <Text style={styles.destinationName}>
                   {item.name.toUpperCase()}
@@ -132,7 +138,6 @@ export default function Home() {
                         ...styles.newsDescription,
                         color: theme.dark ? "#ddd" : "#444",
                       }}
-                      // Añade estas props para mejor control del texto
                       enableExperimentalGhostLinesPrevention={true}
                       tagsStyles={{
                         p: {

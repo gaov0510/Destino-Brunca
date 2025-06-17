@@ -52,11 +52,8 @@ const useAuth = () => {
 
       return response.data;
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log("Auth catch", error);
-      } else {
-        console.log("Default catch", error);
-      }
+      if (error instanceof AxiosError) console.log("Auth catch", error);
+      else console.log(error);
     }
   }
 

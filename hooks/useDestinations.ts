@@ -59,8 +59,6 @@ const useDestinations = (): UseDestinationState => {
       if (category) querys.push(`category=${category}`);
       if (canton) querys.push(`canton=${canton}`);
 
-      console.log("Querys", querys);
-
       const queryString = querys.length ? `?${querys.join("&")}` : "";
 
       // Get data
@@ -83,7 +81,7 @@ const useDestinations = (): UseDestinationState => {
         )
           auth.getToken();
       } else {
-        console.log("Default catch", error);
+        console.log(error);
       }
       return [];
     }

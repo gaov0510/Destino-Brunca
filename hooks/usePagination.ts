@@ -101,7 +101,6 @@ export default function usePagination<T>(initData?: T[]): UsePagination<T> {
   }
 
   function handleChangeAmount(amount: string) {
-    console.log(amount, isNaN(Number(amount)));
     if (!isNaN(Number(amount))) setDataPerPage(Number(amount));
   }
 

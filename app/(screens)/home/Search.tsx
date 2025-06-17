@@ -30,10 +30,6 @@ export default function Search() {
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
   useEffect(() => {
-    console.log(search.data);
-  }, [search.data]);
-
-  useEffect(() => {
     if (search.data.length === 0) search.getData("");
   }, []);
 

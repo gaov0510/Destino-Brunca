@@ -14,8 +14,6 @@ export default function ConfigScreen() {
   const { t } = useTranslation();
   const { config, isLoading, updateConfig, changeLanguage } = useAppConfig();
 
-  console.log(params);
-
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
