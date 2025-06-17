@@ -16,6 +16,7 @@ import Input from "@/components/Inputs/TextInput";
 import RenderHTML from "react-native-render-html";
 import IconSearch from "@/components/Icons/IconSearch";
 import Loading from "@/components/Loading";
+import ItemRow from "@/components/ItemRow";
 
 enum ResponseType {
   EMPRENDIMIENTOS = "emprendimientos",
@@ -107,34 +108,15 @@ export default function Search() {
                 params: { apiId: item.id },
               }}
             >
-              <View style={styles.destiontionItem}>
-                <View style={styles.destinationImg}>
-                  {item.images?.["1"] ? (
-                    <Image
-                      src={item.images["1"].url}
-                      style={{ minWidth: "100%", minHeight: "100%" }}
-                    />
-                  ) : (
-                    <Image
-                      src={(item as News)?.imagen_principal?.images?.["1"].url}
-                      style={{ minWidth: "100%", minHeight: "100%" }}
-                    />
-                  )}
-                </View>
-                <View
-                  onLayout={(event) =>
-                    setContainerWidth(event.nativeEvent.layout.width)
-                  }
-                  style={styles.destinationText}
-                >
-                  <Text style={styles.destinationTitle}>{item.title}</Text>
-                  <RenderHTML
-                    contentWidth={containerWidth}
-                    source={{ html: item.body ?? "" }}
-                    baseStyle={styles.destinationDescription}
-                  />
-                </View>
-              </View>
+              <ItemRow
+                image={
+                  item.images?.["1"]
+                    ? item.images["1"].url
+                    : (item as News)?.imagen_principal?.images?.["1"].url
+                }
+                title={item.title}
+                textHtml={item.body}
+              />
             </Link>
           )}
           onEndReached={handleEndReached}

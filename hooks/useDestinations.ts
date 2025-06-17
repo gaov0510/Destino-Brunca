@@ -2,7 +2,6 @@ import axios, { AxiosError } from "axios";
 import { Destination } from "@/interface/Destination";
 import { create } from "zustand";
 import useAuth from "./useAuth";
-import { query } from "express";
 
 interface DestinationState {
   destinations: Destination[];
@@ -97,10 +96,10 @@ const useDestinations = (): UseDestinationState => {
         throw new Error("Error to get destinations");
 
       // Udpate state
-      content.setDestinations([
-        ...content.destinations,
-        ...(response.data.data as Destination[]),
-      ]);
+      content.setDestinations(
+        [...content.destinations, ...(response.data.data as Destination[])],
+        response.data.pagination
+      );
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {

@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@react-navigation/native";
 import { Link } from "expo-router";
 import {
   ActivityIndicator,
-  FlatList,
-  Image,
   StyleSheet,
+  FlatList,
   Text,
   View,
 } from "react-native";
 import useNews from "@/hooks/useNews";
 
-import RenderHTML from "react-native-render-html";
 import Loading from "@/components/Loading";
+import ItemRow from "@/components/ItemRow";
 
 export default function News() {
-  const theme = useTheme();
   const news = useNews();
-  const [containerWidth, setContainerWidth] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -52,45 +48,11 @@ export default function News() {
               <Link
                 href={{ pathname: `/news/details`, params: { id: item.id } }}
               >
-                <View style={styles.newsItem}>
-                  <View style={styles.newsImg}>
-                    {item.imagen_principal.images["1"] && (
-                      <Image
-                        src={item.imagen_principal.images["1"].url}
-                        style={{ minWidth: "100%", minHeight: "100%" }}
-                      />
-                    )}
-                  </View>
-                  <View
-                    onLayout={(event) =>
-                      setContainerWidth(event.nativeEvent.layout.width)
-                    }
-                    style={styles.newsText}
-                  >
-                    <Text style={styles.newsTitle}>{item.title}</Text>
-                    <RenderHTML
-                      contentWidth={containerWidth}
-                      source={{ html: item.body ?? "" }}
-                      baseStyle={{
-                        ...styles.newsDescription,
-                        color: theme.dark ? "#ddd" : "#444",
-                      }}
-                      // Añade estas props para mejor control del texto
-                      enableExperimentalGhostLinesPrevention={true}
-                      tagsStyles={{
-                        p: {
-                          margin: 0,
-                          padding: 0,
-                        },
-                        body: {
-                          margin: 0,
-                          padding: 0,
-                          whiteSpace: "normal",
-                        },
-                      }}
-                    />
-                  </View>
-                </View>
+                <ItemRow
+                  image={item?.imagen_principal?.images["1"]?.url}
+                  title={item.title}
+                  textHtml={item.body}
+                />
               </Link>
             )}
             contentContainerStyle={{

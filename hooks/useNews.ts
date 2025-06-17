@@ -96,11 +96,14 @@ const useNews = (): UseNewsState => {
       const response = await axios(
         `/content-list?page=${content.page.current_page + 1}`
       );
-      if (!Array.isArray(response.data))
+      if (!Array.isArray(response.data.data))
         throw new Error("Error to get the news");
 
       // Udpate state
-      content.setNews([...content.news, ...(response.data as News[])]);
+      content.setNews(
+        [...content.news, ...(response.data.data as News[])],
+        response.data.pagination
+      );
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {

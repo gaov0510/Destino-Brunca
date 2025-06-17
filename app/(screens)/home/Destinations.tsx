@@ -2,7 +2,6 @@ import { Link, router, useLocalSearchParams } from "expo-router";
 import { Destination as DestinationTS } from "@/interface/Destination";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { RenderHTML } from "react-native-render-html";
 import {
   FlatList,
   Image,
@@ -13,8 +12,10 @@ import {
   View,
 } from "react-native";
 import useDestinations from "@/hooks/useDestinations";
+
 import IconClose from "@/components/Icons/IconClose";
 import Loading from "@/components/Loading";
+import ItemRow from "@/components/ItemRow";
 
 const locations = [
   {
@@ -57,7 +58,6 @@ const locations = [
 export default function Destination() {
   const params = useLocalSearchParams();
   const destinations = useDestinations();
-  const [containerWidth, setContainerWidth] = useState(0);
   const [loadingNextPage, setLoadingNextPage] = useState(false);
   const [data, setData] = useState<DestinationTS[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -68,6 +68,10 @@ export default function Destination() {
   }>();
 
   useEffect(() => {
+    if (destinations.data) setData(destinations.data);
+  }, [destinations.data]);
+
+  useEffect(() => {
     if (params.categoryId && location?.id) {
       setLoading(true);
       destinations
@@ -75,7 +79,6 @@ export default function Destination() {
         .then((data) => {
           if (data) {
             setLoading(false);
-            setData(data);
           }
         });
     }
@@ -91,6 +94,7 @@ export default function Destination() {
   }, [params]);
 
   const handleEndReached = async () => {
+    console.log("Pidiendo mas datos", destinations.page);
     const { current_page, total_pages } = destinations.page;
     if (current_page < total_pages && !loadingNextPage) {
       setLoadingNextPage(true);
@@ -133,29 +137,13 @@ export default function Destination() {
                   params: { index, name: params.location },
                 }}
               >
-                <View style={styles.destiontionItem}>
-                  <View style={styles.destinationImg}>
-                    {item.images["1"] && (
-                      <Image
-                        src={item.images["1"].url}
-                        style={{ minWidth: "100%", minHeight: "100%" }}
-                      />
-                    )}
-                  </View>
-                  <View
-                    onLayout={(event) =>
-                      setContainerWidth(event.nativeEvent.layout.width)
-                    }
-                    style={styles.destinationText}
-                  >
-                    <Text style={styles.destinationTitle}>{item.title}</Text>
-                    <RenderHTML
-                      contentWidth={containerWidth}
-                      source={{ html: item.body ?? "" }}
-                      baseStyle={styles.destinationDescription}
-                    />
-                  </View>
-                </View>
+                {item.images["1"].url && item.title && item.body && (
+                  <ItemRow
+                    image={item.images["1"].url}
+                    title={item.title}
+                    textHtml={item.body}
+                  />
+                )}
               </Link>
             )}
             onEndReached={handleEndReached}
